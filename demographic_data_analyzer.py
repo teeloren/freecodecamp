@@ -1,34 +1,5 @@
+
 import pandas as pd
-df = pd.read_csv(
-    'https://raw.githubusercontent.com/teeloren/freecodecamp/main/adult.data.csv')
-
-# What is the percentage of people who have a Bachelor's degree?
-ed = df['education']
-total = ed.count()
-ed_val = ed.value_counts()
-bach = ed_val['Bachelors']
-percentage_bachelors = round(bach/total*100, 1)
-
-# What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
-# What percentage of people without advanced education make more than 50K?
-
-# with and without `Bachelors`, `Masters`, or `Doctorate`
-higher = ed_val['Masters'] + ed_val['Doctorate'] + ed_val['Bachelors']
-higher_education = (higher/total)*100
-
-lower = total - higher
-lower_education = (lower/total)*100
-
-# percentage with salary >50K
-salary_50K = df[df['salary'] == '>50K']
-salary_total = salary_50K['education'].count()
-salary_val = salary_50K['education'].value_counts()
-higher_sal = salary_val['Masters'] + \
-    salary_val['Doctorate'] + salary_val['Bachelors']
-
-higher_education_rich = round(((higher_sal/salary_total)*100), 1)
-lower_education_rich = round(
-    ((salary_total - higher_sal)/salary_total)*100, 1)
 
 
 def calculate_demographic_data(print_data=True):
@@ -53,24 +24,21 @@ def calculate_demographic_data(print_data=True):
 
     # What percentage of people with advanced education (`Bachelors`, `Masters`, or `Doctorate`) make more than 50K?
     # What percentage of people without advanced education make more than 50K?
+    mast = ed_val['Masters']
+    doct = ed_val['Doctorate']
+    adv_ed = bach + mast + doct
+    no_adv_ed = total - adv_ed
 
-    # with and without `Bachelors`, `Masters`, or `Doctorate`
-    higher = ed_val['Masters'] + ed_val['Doctorate'] + ed_val['Bachelors']
-    higher_education = (higher/total)*100
-
-    lower = total - higher
-    lower_education = (lower/total)*100
-
-    # percentage with salary >50K
     salary_50K = df[df['salary'] == '>50K']
-    salary_total = salary_50K['education'].count()
-    salary_val = salary_50K['education'].value_counts()
-    higher_sal = salary_val['Masters'] + \
-        salary_val['Doctorate'] + salary_val['Bachelors']
+    high_sal = salary_50K['education'].value_counts()
+    sal_total = salary_50K['education'].count()
 
-    higher_education_rich = round(((higher_sal/salary_total)*100), 1)
-    lower_education_rich = round(
-        ((salary_total - higher_sal)/salary_total)*100, 1)
+    adv_sal = high_sal['Bachelors'] + \
+        high_sal['Masters'] + high_sal['Doctorate']
+    adv_ed_sal = sal_total - adv_sal
+
+    higher_education_rich = round(((adv_sal/adv_ed)*100), 1)
+    lower_education_rich = round(((adv_ed_sal/no_adv_ed)*100), 1)
 
     # What is the minimum number of hours a person works per week (hours-per-week feature)?
     hrs = df['hours-per-week']
@@ -139,4 +107,4 @@ def calculate_demographic_data(print_data=True):
     }
 
 
-# print(calculate_demographic_data(print_data=True))
+print(calculate_demographic_data(print_data=True))
