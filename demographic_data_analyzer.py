@@ -21,9 +21,42 @@ higher_sal = salary_val['Masters'] + \
     salary_val['Doctorate'] + salary_val['Bachelors']
 
 higher_education_rich = (higher_sal/salary_total)*100
-print(higher_education_rich)
 lower_education_rich = ((salary_total - higher_sal)/salary_total)*100
-print(lower_education_rich)
+
+
+# What is the minimum number of hours a person works per week (hours-per-week feature)?
+hrs = df['hours-per-week']
+min_work_hours = min(hrs)
+# What percentage of the people who work the minimum number of hours per week have a salary of >50K?
+min_people = df[hrs == min_work_hours]
+min_total = min_people['hours-per-week'].count()
+
+num_min_workers = min_people[min_people['salary'] == '>50K']['salary'].count()
+rich_percentage = (num_min_workers/min_total)*100
+
+# What country has the highest percentage of people that earn >50K?
+country = df['native-country']
+country_total = country.value_counts()
+country_50K = salary_50K['native-country'].value_counts()
+country_perc = (country_50K/country_total)*100
+dt = country_perc.loc[country_perc == max(country_perc)]
+
+dict_country = dt.to_dict()
+for key, value in dict_country.items():
+    highest_earning_country = key
+    highest_earning_country_percentage = value
+
+
+# Identify the most popular occupation for those who earn >50K in India.
+India_50K = salary_50K['native-country']
+pop_occ = salary_50K[salary_50K['native-country']
+                     == 'India']['occupation'].value_counts()
+most_pop_occ = pop_occ.loc[pop_occ == max(pop_occ)]
+
+dict_pop_occ = most_pop_occ.to_dict()
+for key, value in dict_pop_occ.items():
+    top_IN_occupation = key
+    print(top_IN_occupation)
 
 
 # def calculate_demographic_data(print_data=True):
